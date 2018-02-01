@@ -1,0 +1,36 @@
+spx_options=rad.cvs("SPX_all1.cvs")
+str(spx_options)
+spx_options$Date=as.Date(spx_options$Date)
+spx_options$Expiry=as.Date(spx_options$Expiry)
+str(spx_options)
+
+head(spx_options)
+tail(spx_options)
+
+spx_options$ID=NULL
+spx_options$Dispersion=NULL
+#remove first 13 contracts
+#nonsense in a few columns
+
+spx_options=spx_options[14:nrow(spx_options),]
+#time o maturity as a year fraction
+spx_options$time.to.maturity=as.numeric(spx_options$Expiry-spx_options$Date)/360
+
+#Delta (as percentage) is the numer of shares an option writer should purchase 
+#to hedge their position, typically options comprimise the right to buy 100 
+#units of underlying hence delta*100 here.
+
+#Which are the most out of the money options for the first 30 days?
+day1=spx_options[1:13,]
+
+day1=day1[order(day1$Delta),]
+
+#ATM opion is closest price to strike price....delta 55
+
+#Which opions end in the money?
+#have to check S_T-K>0, K=strike.
+#S_T is underlying at expiry
+#how many? (in pecentages)
+#average payoff?
+
+spx_options$options.payoff=pmax(spx_options$Payoff_Expiry-spx_options$Strike,0)
